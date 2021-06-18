@@ -3,7 +3,7 @@
 
 # 참조 코드
 
-### CameraXbasic 코드: https://github.com/googlearchive/android-Camera2Basic
+### Camera 예시코드: https://github.com/android/camera-samples
 
 ### CameraX 튜토리얼 : https://developer.android.com/codelabs/camerax-getting-started#0
 
