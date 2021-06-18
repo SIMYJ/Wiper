@@ -173,7 +173,7 @@ class RetrofitActivity : AppCompatActivity(){
         Log.d("dynamicCanvasView(dp) :","높이:${dynamicCanvasView?.height} " )
 
 
-        Log.d("viewTobitmap_(dp)","너비 : ${bitmap.width}" )
+        Log.d("viewTobitmap_(dp)","너s비 : ${bitmap.width}" )
         Log.d("viewTobitmap_(dp)","높 : ${bitmap.height}" )
 
         return bitmap

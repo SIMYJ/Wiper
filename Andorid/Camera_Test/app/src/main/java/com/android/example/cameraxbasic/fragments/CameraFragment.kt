@@ -552,68 +552,70 @@ class CameraFragment : Fragment() {
                 }
             }
 
-            /**
-             * 횡단비 조절
-             */
-            controls.findViewById<ImageButton>(R.id.camera_ratio).setOnClickListener {
-                // Only navigate when the gallery has photos
-                var ratioButton: ImageButton = controls.findViewById<ImageButton>(R.id.camera_ratio)
-                // ratioNum => (0)1:1 (1)3:4 (2)9:16 (3)full
 
-                Log.d(TAG, "getSupportedPreviewSizes():  ")
+        }
+        /**
+         * 횡단비 조절
+         */
+        controls.findViewById<ImageButton>(R.id.camera_ratio).setOnClickListener {
+            // Only navigate when the gallery has photos
+            var ratioButton: ImageButton = controls.findViewById<ImageButton>(R.id.camera_ratio)
+            // ratioNum => (0)1:1 (1)3:4 (2)9:16 (3)full
 
-
-
-                val metrics = windowManager.getCurrentWindowMetrics().bounds
-                Log.d(TAG, "Screen metrics: ${metrics.width()} x ${metrics.height()}")
-
-                val screenAspectRatio = aspectRatio(metrics.width(), metrics.height())
-                Log.d(TAG, "Preview aspect ratio: $screenAspectRatio")
+            Log.d(TAG, "getSupportedPreviewSizes():  ")
 
 
-                val rotation = viewFinder.display.rotation
-                Log.d(TAG, "viewFinder.display.rotation: $rotation")
+            val metrics = windowManager.getCurrentWindowMetrics().bounds
+            Log.d(TAG, "Screen metrics: ${metrics.width()} x ${metrics.height()}")
 
-                when (ratioNum) {
-                    "0"-> {
-                        ratioNum="1"
-                        ratioButton.setImageResource(R.drawable.ic_screen_3_4_1_black)
-
-                        // Preview
-                       preview  = Preview.Builder()
-                            .build()
-                            .also {
-                                it.setSurfaceProvider(viewFinder.surfaceProvider)
-                            }
+            val screenAspectRatio = aspectRatio(metrics.width(), metrics.height())
+            Log.d(TAG, "Preview aspect ratio: $screenAspectRatio")
 
 
-                    }
-                    "1" -> {
-                        ratioNum="2"
-                        ratioButton.setImageResource(R.drawable.ic_screen_9_16_1_black)
+            val rotation = viewFinder.display.rotation
+            Log.d(TAG, "viewFinder.display.rotation: $rotation")
 
-                        // Preview
-                        preview = Preview.Builder()
-                            // We request aspect ratio but no resolution
-                            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+            when (ratioNum) {
+                "0"-> {
+                    ratioNum="1"
+                    ratioButton.setImageResource(R.drawable.ic_screen_3_4_1_black)
 
-                            // Set initial target rotation
-                            .setTargetRotation(rotation)
-                            .build()
+                    // Preview
+                    preview  = Preview.Builder()
+                        .build()
+                        .also {
+                            it.setSurfaceProvider(viewFinder.surfaceProvider)
+                        }
 
 
-                    }
-                    "2" -> {
-                        ratioNum="3"
-                        ratioButton.setImageResource(R.drawable.ic_screen_1_1_1_black)
-                    }
-                    "3" -> {
-                        ratioNum="0"
-                        ratioButton.setImageResource(R.drawable.ic_fullscreen_black_24dp)
-                    }
+                }
+                "1" -> {
+                    ratioNum="2"
+                    ratioButton.setImageResource(R.drawable.ic_screen_9_16_1_black)
+
+                    // Preview
+                    preview = Preview.Builder()
+                        // We request aspect ratio but no resolution
+                        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+
+                        // Set initial target rotation
+                        .setTargetRotation(rotation)
+                        .build()
+
+
+                }
+                "2" -> {
+                    ratioNum="3"
+                    ratioButton.setImageResource(R.drawable.ic_screen_1_1_1_black)
+                }
+                "3" -> {
+                    ratioNum="0"
+                    ratioButton.setImageResource(R.drawable.ic_fullscreen_black_24dp)
                 }
             }
         }
+
+
     }
 
     /** Enabled or disabled a button to switch cameras depending on the available cameras */
