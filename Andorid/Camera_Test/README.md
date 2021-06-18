@@ -3,11 +3,11 @@
 
 # 참조 코드
 
-# CameraXbasic 코드: https://github.com/googlearchive/android-Camera2Basic
+### CameraXbasic 코드: https://github.com/googlearchive/android-Camera2Basic
 
-# CameraX 튜토리얼  https://developer.android.com/codelabs/camerax-getting-started#0
+### CameraX 튜토리얼 : https://developer.android.com/codelabs/camerax-getting-started#0
 
-# Canvas 튜토리얼 https://developer.android.com/codelabs/advanced-android-kotlin-training-canvas#0
+### Canvas 튜토리얼 : https://developer.android.com/codelabs/advanced-android-kotlin-training-canvas#0
 
 
 
