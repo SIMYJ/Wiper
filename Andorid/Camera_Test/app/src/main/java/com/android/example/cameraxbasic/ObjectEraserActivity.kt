@@ -322,6 +322,8 @@ class ObjectEraserActivity : AppCompatActivity() {
                     val bitmap_modified = BitmapFactory.decodeStream(inputstream);
 
 
+                    image_modified_path = saveInternalStorage(getApplicationContext(),"img_erased",bitmap_modified!!)
+
 
                     //Canvas제거
                     binding.customView.removeView(dynamicCanvasView)
@@ -330,7 +332,6 @@ class ObjectEraserActivity : AppCompatActivity() {
                     binding.imageView.setImageBitmap(bitmap_modified)
 
                     // 캐시저장소에 이미지 저장, 저장 경로 저장
-                    image_modified_path = saveInternalStorage(getApplicationContext(),"img_erased",bitmap_modified!!)
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Some error occurred...", Toast.LENGTH_LONG).show();
