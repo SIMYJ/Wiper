@@ -143,7 +143,7 @@ class ObjectEraserActivity : AppCompatActivity() {
             var bitmap:Bitmap = BitmapFactory.decodeFile(image_modified_path);
 
             try {
-
+                // 메인액티비티 getOutputDirectory의 getOutputDirectory메소드 사
                 var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
                 var tmpFile =File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
                     .format(System.currentTimeMillis())+".jpg")  //파일명까지 포함한 경로
@@ -167,26 +167,7 @@ class ObjectEraserActivity : AppCompatActivity() {
 
     }
 
-    // 메인액티비티 getOutputDirectory
-    fun getOutputDirectory(context: Context): File {
-        val appContext = context.applicationContext
 
-        //firstOrNull() 은 첫번째 아이템을 가져오되, 첫번째 아이템이 없으면 null을 반환합니다.
-        val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-            File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
-
-        Log.d("Output_mediaDir","${mediaDir}")
-        if (mediaDir != null && mediaDir.exists()){
-            Log.d("사용 가능한 외부 미디어","${mediaDir}")
-            return mediaDir//사용 가능한 외부 미디어
-
-        }else{
-            Log.d("외부 미디어(앱의 파일 디렉토리)","${appContext.filesDir}")
-            return appContext.filesDir//앱의 파일 디렉토리
-
-        }
-
-    }
 
 
     // todo 갤러리 열기
