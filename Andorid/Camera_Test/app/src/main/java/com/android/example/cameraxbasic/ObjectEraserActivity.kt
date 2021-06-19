@@ -123,6 +123,7 @@ class ObjectEraserActivity : AppCompatActivity() {
 
             if(bitmap_tmp==null){
             }else{
+
                 dynamicCanvasView = MyCanvasView(this,null,0,selectedPhotoUri)
 
                 var layoutParams = LinearLayout.LayoutParams(
@@ -151,6 +152,7 @@ class ObjectEraserActivity : AppCompatActivity() {
 
                 var fos : FileOutputStream= FileOutputStream(tmpFile)
 
+                Log.d("tmpFile","${tmpFile}")
                 bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
@@ -207,8 +209,7 @@ class ObjectEraserActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         //Canvas제거
-        binding.customView.removeView(dynamicCanvasView)
-        dynamicCanvasView=null
+
     }
 
     // 특정 액티비티 종료시 실행되는 코드
@@ -221,6 +222,11 @@ class ObjectEraserActivity : AppCompatActivity() {
         // 요청코드= OPEN_GALLERY 이고, 응답코드 =Activity.RESULT_OK 이고, 반환 데이터가 존재할때
         if(requestCode == OPEN_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
             //데이터 URI selectedPhotoUri변수에 저장후 textView에 출력
+
+            // 갤러리 실행시 canvas 삭제
+            binding.customView.removeView(dynamicCanvasView)
+            dynamicCanvasView=null
+
             selectedPhotoUri = data.data
 
             //media content URI
@@ -302,17 +308,19 @@ class ObjectEraserActivity : AppCompatActivity() {
 
                     /**  Call에 넘겨주는 ResponseBody는 okhttp3패키지의 ResponseBody이다.  */
                     /** https://zerodice0.tistory.com/198 참조 */
-                    var inputstream : InputStream = response.body()?.byteStream()!!;
-                    var bitmap_modified = BitmapFactory.decodeStream(inputstream);
+                    val inputstream : InputStream = response.body()?.byteStream()!!;
+                    val bitmap_modified = BitmapFactory.decodeStream(inputstream);
 
-                    // 캐시저장소에 이미지 저장, 저장 경로 저장
-                    image_modified_path = saveInternalStorage(getApplicationContext(),"img_erased",bitmap_modified!!)
+
 
                     //Canvas제거
                     binding.customView.removeView(dynamicCanvasView)
                     dynamicCanvasView=null
 
                     binding.imageView.setImageBitmap(bitmap_modified)
+
+                    // 캐시저장소에 이미지 저장, 저장 경로 저장
+                    image_modified_path = saveInternalStorage(getApplicationContext(),"img_erased",bitmap_modified!!)
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Some error occurred...", Toast.LENGTH_LONG).show();
