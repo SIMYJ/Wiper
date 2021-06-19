@@ -139,7 +139,9 @@ class ObjectEraserActivity : AppCompatActivity() {
         //Canvas 실행
         binding.imgViewSave.setOnClickListener{
             Log.d("버튼클릭","imgViewCanvasEraser실행")
-            /*
+
+            var bitmap:Bitmap = BitmapFactory.decodeFile(image_modified_path);
+
             try {
 
                 var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
@@ -149,7 +151,7 @@ class ObjectEraserActivity : AppCompatActivity() {
 
                 var fos : FileOutputStream= FileOutputStream(tmpFile)
 
-                bitmap_modified?.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
                 Toast.makeText(getApplicationContext(), "image saved ", Toast.LENGTH_LONG).show();
@@ -157,7 +159,7 @@ class ObjectEraserActivity : AppCompatActivity() {
                 Log.e("error", e.toString());
                 e.printStackTrace()
             }
-            */
+
 
 
         }
