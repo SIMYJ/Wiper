@@ -1,6 +1,7 @@
 package com.android.example.cameraxbasic
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -10,10 +11,12 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.android.example.cameraxbasic.databinding.ActivityObjectEraserBinding
 import com.android.example.cameraxbasic.databinding.ActivityRetrofitBinding
 import com.android.example.cameraxbasic.utils.DlogUtil
@@ -28,17 +31,26 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.InputStream
+import java.security.AccessController.getContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ObjectEraserActivity : AppCompatActivity() {
 
     lateinit private var binding : ActivityObjectEraserBinding
     private val OPEN_GALLERY = 100
-    var bitmap_tmp: Bitmap? = null
-    var bitmap_path :String? = null
-    var image_content_uri :String? =null // 이미지 절대 경로 ID
-    var image_absolutely_path :String? =null // 이미지 절대 경로
-    var canvas_cach_path :String? =null // paint된 canvas 경로
+
+    var bitmap_tmp: Bitmap? = null //화면에 보여질 이미지
+    //var bitmap_modified :Bitmap? = null //수정된 이미지 경로(내부 캐시)
+
+    var image_content_uri :String? =null // 원본 이미지 절대 경로 ID
+    var image_absolutely_path :String? =null // 원본 이미지 절대 경로
+    var image_modified_path :String? = null //수정된 이미지 경로(내부 캐시)
+
+    var canvas_cach_path :String? =null // 페인팅 이미지 canvas 경로
 
     var dynamicCanvasView : MyCanvasView? = null // Canvas View
     var selectedPhotoUri : Uri? =null
@@ -83,7 +95,7 @@ class ObjectEraserActivity : AppCompatActivity() {
 
 
             //이미지 경로 없는 경우(실행X)
-            } else if (image_absolutely_path  == null) {
+            } else if (image_modified_path  == null) {
                 Log.d("sendButton02클릭","경로 없음")
 
 
@@ -96,8 +108,9 @@ class ObjectEraserActivity : AppCompatActivity() {
 
                 Log.d("sendButton02클릭","경로 존재")
 
+
                 // todo 원본이미지,Paint이미지 서버에 전송
-                sendImageRetrofit02(image_absolutely_path!!,canvas_cach_path!!)
+                sendImageRetrofit02(image_modified_path!!,canvas_cach_path!!)
 
             }
         }
@@ -123,18 +136,60 @@ class ObjectEraserActivity : AppCompatActivity() {
             }
         }
 
-        //Canvas 지우개 실행
-        binding.imgViewCanvasEraser.setOnClickListener{
+        //Canvas 실행
+        binding.imgViewSave.setOnClickListener{
             Log.d("버튼클릭","imgViewCanvasEraser실행")
+            /*
+            try {
+
+                var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
+                var tmpFile =File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
+                    .format(System.currentTimeMillis())+".jpg")  //파일명까지 포함한 경로
+
+
+                var fos : FileOutputStream= FileOutputStream(tmpFile)
+
+                bitmap_modified?.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+                Toast.makeText(getApplicationContext(), "image saved ", Toast.LENGTH_LONG).show();
+            }catch(e: Exception) {
+                Log.e("error", e.toString());
+                e.printStackTrace()
+            }
+            */
+
 
         }
 
 
     }
 
+    // 메인액티비티 getOutputDirectory
+    fun getOutputDirectory(context: Context): File {
+        val appContext = context.applicationContext
+
+        //firstOrNull() 은 첫번째 아이템을 가져오되, 첫번째 아이템이 없으면 null을 반환합니다.
+        val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+            File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
+
+        Log.d("Output_mediaDir","${mediaDir}")
+        if (mediaDir != null && mediaDir.exists()){
+            Log.d("사용 가능한 외부 미디어","${mediaDir}")
+            return mediaDir//사용 가능한 외부 미디어
+
+        }else{
+            Log.d("외부 미디어(앱의 파일 디렉토리)","${appContext.filesDir}")
+            return appContext.filesDir//앱의 파일 디렉토리
+
+        }
+
+    }
+
 
     // todo 갤러리 열기
     private fun openGallery(){
+
         val intent = Intent(Intent.ACTION_PICK)
         intent.setType("image/*")
         startActivityForResult(intent,OPEN_GALLERY)
@@ -144,13 +199,15 @@ class ObjectEraserActivity : AppCompatActivity() {
     }
 
 
+
+
     override fun onResume() {
         super.onResume()
 
 
         //겹치는 View중 상단으로 올린다.
         binding.imgViewObjectEraser.bringToFront();
-        binding.imgViewCanvasEraser.bringToFront();
+        binding.imgViewSave.bringToFront();
         binding.imgViewCanvasDraw.bringToFront();
         binding.imgViewOpenGallery.bringToFront();
 
@@ -166,6 +223,9 @@ class ObjectEraserActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        //Canvas제거
+        binding.customView.removeView(dynamicCanvasView)
+        dynamicCanvasView=null
     }
 
     // 특정 액티비티 종료시 실행되는 코드
@@ -174,11 +234,6 @@ class ObjectEraserActivity : AppCompatActivity() {
     @Override
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-
-
-
-
 
         // 요청코드= OPEN_GALLERY 이고, 응답코드 =Activity.RESULT_OK 이고, 반환 데이터가 존재할때
         if(requestCode == OPEN_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
@@ -189,7 +244,10 @@ class ObjectEraserActivity : AppCompatActivity() {
             image_content_uri = selectedPhotoUri.toString()
 
             //Uri-> 절대 경로 저장
-            getabsolutelyPath(selectedPhotoUri!!)
+            image_absolutely_path =getabsolutelyPath(selectedPhotoUri!!)
+
+            // 수정 작성 할 이미지 경로
+            image_modified_path=image_absolutely_path
 
 
             // uri경로를 가지고  Bitmap불러오기
@@ -262,15 +320,16 @@ class ObjectEraserActivity : AppCompatActivity() {
                     /**  Call에 넘겨주는 ResponseBody는 okhttp3패키지의 ResponseBody이다.  */
                     /** https://zerodice0.tistory.com/198 참조 */
                     var inputstream : InputStream = response.body()?.byteStream()!!;
-                    var bitmap : Bitmap = BitmapFactory.decodeStream(inputstream);
+                    var bitmap_modified = BitmapFactory.decodeStream(inputstream);
 
-                    //binding.imageViewLoad.setImageBitmap(bitmap)
+                    // 캐시저장소에 이미지 저장, 저장 경로 저장
+                    image_modified_path = saveInternalStorage(getApplicationContext(),"img_erased",bitmap_modified!!)
 
                     //Canvas제거
                     binding.customView.removeView(dynamicCanvasView)
                     dynamicCanvasView=null
 
-                    binding.imageView.setImageBitmap(bitmap)
+                    binding.imageView.setImageBitmap(bitmap_modified)
 
                 } else {
                     Toast.makeText(getApplicationContext(), "Some error occurred...", Toast.LENGTH_LONG).show();
@@ -292,13 +351,29 @@ class ObjectEraserActivity : AppCompatActivity() {
         }else {
             cursor.moveToFirst()
             var idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-            image_absolutely_path = cursor.getString(idx).toString()
+            var path = cursor.getString(idx).toString()
             cursor.close()
-            return image_absolutely_path as String
+            return path as String
         }
         Log.e("tag", "절대경로 "+ result)
         return result
     }
+
+    // todo 내부 저장소에 저장
+//https://boilerplate.tistory.com/43
+    fun saveInternalStorage(context: Context, fileName: String, bitmpa:Bitmap) :String{
+        val INTERNAL_STORAGE_IMAGE_FOLDER = "imgDIr"//app_imgDir에 저장
+        val storageDir = context.getDir(INTERNAL_STORAGE_IMAGE_FOLDER, Context.MODE_PRIVATE)
+        val imgFile = File(storageDir, fileName + ".png")
+
+        val fileOutputStream = FileOutputStream(imgFile.absoluteFile)
+        bitmpa.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream.close()
+
+        return imgFile.absoluteFile.toString()
+    }
+
+
 
 
 
@@ -311,7 +386,7 @@ class ObjectEraserActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "CameraXBasic"
+        private const val TAG = "WiperXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
     }

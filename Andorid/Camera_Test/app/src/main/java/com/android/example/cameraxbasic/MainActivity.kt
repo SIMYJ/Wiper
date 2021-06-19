@@ -101,10 +101,7 @@ class MainActivity : AppCompatActivity() {
             }else{
                 Log.d("Output_filesDir","${appContext.filesDir}")
                 return appContext.filesDir//앱의 파일 디렉토리
-
-
             }
-
         }
     }
 }
