@@ -147,10 +147,10 @@ class ObjectEraserActivity : AppCompatActivity() {
 
             try {
                 // 메인액티비티 getOutputDirectory의 getOutputDirectory메소드 사용
-                //var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
-                var path =getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
+                //var path =getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-                var tmpFile =File(path, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
+                var tmpFile =File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
                     .format(System.currentTimeMillis())+".jpg")  //파일명까지 포함한 경로
 
                 // 저장 위치 및 메타 데이터를 구성
