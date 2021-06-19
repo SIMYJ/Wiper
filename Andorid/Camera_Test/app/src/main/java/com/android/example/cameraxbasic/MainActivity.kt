@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        //  outputDirectory = MainActivity.getOutputDirectory(requireContext())
+
         /** Use external media if it is available, our app's file directory otherwise */
         /** 사용 가능한 외부 미디어, 그렇지 않은 경우 앱의 파일 디렉토리 사용 */
         fun getOutputDirectory(context: Context): File {
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                 File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
 
 
-            Log.d("Output_mediaDir","${mediaDir}")
+            //Log.d("Output_mediaDir","${mediaDir}")
             if (mediaDir != null && mediaDir.exists()){
                 Log.d("Output_mediaDir","${mediaDir}")
                 return mediaDir//사용 가능한 외부 미디어

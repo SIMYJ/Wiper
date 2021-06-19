@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.camera.core.ImageCapture
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.android.example.cameraxbasic.databinding.ActivityObjectEraserBinding
 import com.android.example.cameraxbasic.databinding.ActivityRetrofitBinding
@@ -137,26 +138,35 @@ class ObjectEraserActivity : AppCompatActivity() {
             }
         }
 
-        //Canvas 실행
+        //
         binding.imgViewSave.setOnClickListener{
-            Log.d("버튼클릭","imgViewCanvasEraser실행")
+            Log.d("버튼클릭","binding.imgViewSave실행")
+
 
             var bitmap:Bitmap = BitmapFactory.decodeFile(image_modified_path);
 
             try {
-                // 메인액티비티 getOutputDirectory의 getOutputDirectory메소드 사
-                var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
-                var tmpFile =File(outputDirectory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
+                // 메인액티비티 getOutputDirectory의 getOutputDirectory메소드 사용
+                //var outputDirectory = MainActivity.getOutputDirectory(applicationContext)
+                var path =getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+                var tmpFile =File(path, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.KOREA)
                     .format(System.currentTimeMillis())+".jpg")  //파일명까지 포함한 경로
+
+                // 저장 위치 및 메타 데이터를 구성
+                // 저장 위치는 File, MediaStore또는 OutputStream. 메타 데이터는 저장된 이미지와 함께 저장됩니다
+
+
+
 
 
                 var fos : FileOutputStream= FileOutputStream(tmpFile)
 
-                Log.d("tmpFile","${tmpFile}")
+                Log.d("수정된이미 저장","${tmpFile}")
                 bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fos);
                 fos.flush();
                 fos.close();
-                Toast.makeText(getApplicationContext(), "image saved ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "image save ", Toast.LENGTH_LONG).show();
             }catch(e: Exception) {
                 Log.e("error", e.toString());
                 e.printStackTrace()
@@ -378,8 +388,6 @@ class ObjectEraserActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "WiperXBasic"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val REQUEST_CODE_PERMISSIONS = 10
     }
 
 }
