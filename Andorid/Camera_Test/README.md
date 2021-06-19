@@ -23,8 +23,8 @@ GalleryFragment.kt에서 [R.id.gallery_button] 클릭리스너 호출시 기존 
 
 - 0bjectEraserActivity의 버튼 종류
 
-1.이미지 서버 전송
-2.캔버스 생성 
-3.갤러리 열기
+1. 이미지 서버 전송
+2. 캔버스 생성 
+3. 갤러리 열기
 
 
