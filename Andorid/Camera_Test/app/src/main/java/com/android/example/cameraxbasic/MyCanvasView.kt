@@ -62,6 +62,7 @@ class MyCanvasView @JvmOverloads constructor(
     private  var marginHeight :Float? = null
     private  var marginWidth :Float? = null
 
+    private var isErasing : Boolean =false
 
     private var phtoUri: Uri = uri!!
     // Holds the path you are currently drawing.
@@ -82,9 +83,13 @@ class MyCanvasView @JvmOverloads constructor(
     // Rect 사격형 테두리 적용(굳이 사용할 필요가 없다.)
     //private lateinit var frame: Rect
 
-    //그릴 페인트를 설정합니다.
+    //페인트를 설정
     // Set up the paint with which to draw.
-    private val paint = Paint().apply {
+
+    lateinit var paint :Paint
+
+    //색칠 설정
+    private val drawpPaint = Paint().apply {
 
         color = drawColor
         //모양에 영향을 미치지 않고 그려진 가장자리를 다듬습니다.
@@ -98,6 +103,7 @@ class MyCanvasView @JvmOverloads constructor(
         strokeCap = Paint.Cap.ROUND // default: BUTT
         strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
+
 
     /**
      * Don't draw every single pixel.
@@ -157,8 +163,6 @@ class MyCanvasView @JvmOverloads constructor(
             canvasWidth = deviceWidth
             marginHeight = (deviceHeight!!- canvasHeight!!)/2
             marginWidth = 0f
-
-            extraBitmap = Bitmap.createBitmap(canvasWidth?.toInt()!!, canvasHeight?.toInt()!!, Bitmap.Config.ARGB_8888)
             Log.d("캔버스 실행","첫번재if[너비,높이] ${canvasWidth},${canvasHeight}")
 
         }else if(bitmapWidth!!  < deviceWidth!!){
@@ -168,17 +172,17 @@ class MyCanvasView @JvmOverloads constructor(
 
             marginHeight =(deviceHeight!!- canvasHeight!!)/2
             marginWidth =(deviceWidth!!- canvasWidth!!)/2
-            extraBitmap = Bitmap.createBitmap(canvasWidth?.toInt()!!, canvasHeight?.toInt()!!, Bitmap.Config.ARGB_8888)
             Log.d("캔버스 실행","두번재if[너비,높이] ${canvasWidth},${canvasHeight}")
-
         }
 
         else{
+            canvasWidth = bitmapWidth
+            canvasHeight = bitmapHeight
             marginHeight =0f
-            extraBitmap = Bitmap.createBitmap(bitmapWidth!!.toInt(), bitmapHeight!!.toInt(), Bitmap.Config.ARGB_8888)
             Log.d("캔버스 실행","번재if[너비,높이] ${bitmapWidth},${bitmapHeight}")
 
         }
+        extraBitmap = Bitmap.createBitmap(canvasWidth?.toInt()!!, canvasHeight?.toInt()!!, Bitmap.Config.ARGB_8888)
 
 
         extraCanvas = Canvas(extraBitmap)
@@ -206,12 +210,7 @@ class MyCanvasView @JvmOverloads constructor(
         bitmapHeight
         canvasHeight
         canvasWidth
-
-
-            canvas.drawBitmap(extraBitmap, marginWidth!!,marginHeight!!, paint)
-            Log.d("캔버스 실행","onDraw[너비_마진] ${marginHeight}")
-            Log.d("캔버스 실행","onDraw[높이_마진] ${marginHeight}")
-
+        canvas.drawBitmap(extraBitmap, marginWidth!!, marginHeight!!, paint)
 
 
         // 캔버스 둘레에 프레임을 그립니다.
@@ -363,19 +362,11 @@ class MyCanvasView @JvmOverloads constructor(
         return imgFile.absoluteFile.toString()
     }
 
-    /*사용안함
-    fun convertPixelsToDp(px : Float ,context : Context ) :Float {
-        return px / ( context.getResources().getDisplayMetrics().densityDpi.toFloat()
-                / DisplayMetrics.DENSITY_DEFAULT);
-    }
-    */
+
 
     fun getCanvasWidth(bitmapWidth: Float,bitmapHeight: Float,deviceWidth: Float,deviceHeight: Float) :Float{
         //bitmapWidth : bitmapHeight  = deviceWidth : X
-
             return ( (bitmapHeight*deviceWidth)/bitmapWidth)
         }
-
-
 
 }

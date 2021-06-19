@@ -5,15 +5,12 @@
     package="com.android.example.cameraxbasic">
     <!-- Enable instant app support -->
     <dist:module dist:instant="true" /> <!-- Declare features -->
-
     <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Storage Permission -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,17 +19,17 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup"
+        tools:ignore="AllowBackup">
+        <activity
+            android:name=".ObjectEraserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
 
-        >
 
         <activity
             android:name=".RetrofitActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
             android:name=".IntroActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -41,19 +38,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-
-        <!--android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"-->
-
+        </activity> <!-- android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize" -->
         <activity
             android:name=".MainActivity"
             android:clearTaskOnLaunch="true"
-            android:screenOrientation="portrait"
             android:icon="@mipmap/ic_launcher"
             android:resizeableActivity="true"
             android:rotationAnimation="seamless"
-
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:targetApi="O">
 

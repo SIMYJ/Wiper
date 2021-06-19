@@ -37,6 +37,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.android.example.cameraxbasic.ObjectEraserActivity
 import com.android.example.cameraxbasic.utils.showImmersive
 import com.android.example.cameraxbasic.R
 import com.android.example.cameraxbasic.RetrofitActivity
@@ -169,8 +170,11 @@ class GalleryFragment internal constructor() : Fragment() {
 
         view.findViewById<ImageButton>(R.id.gallery_button).setOnClickListener {
 
-            val intent = Intent(context, RetrofitActivity::class.java)
+            val intent = Intent(context, ObjectEraserActivity::class.java)
             startActivityForResult(intent,1001)
+
+            //val intent = Intent(context, RetrofitActivity::class.java)
+            //startActivityForResult(intent,1001)
 
 
 
