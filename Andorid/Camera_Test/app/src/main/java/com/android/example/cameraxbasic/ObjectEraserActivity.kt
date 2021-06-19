@@ -82,19 +82,19 @@ class ObjectEraserActivity : AppCompatActivity() {
                 Log.d("도화지"," 사용 안됨")
 
 
-            //절대경로 없는 경우(실행X)
+            //이미지 경로 없는 경우(실행X)
             } else if (image_absolutely_path  == null) {
-                Log.d("sendButton02클릭","절대경로 없음")
+                Log.d("sendButton02클릭","경로 없음")
 
 
             } else {
-                //1)절대 경로 있는 경우(실행O) +  2)// CanvasView가 동적으로 생성 될때
+                //1)이미지 경로 는 경우(실행O) +  2)// CanvasView가 동적으로 생성 될때
 
                 // todo paint된 canvas 이미지 내부캐 저장소 저장
                 canvas_cach_path=dynamicCanvasView!!.saveInternalStorage(this,"Canvas_paint_img")
                 Log.d("도화지","사용 됨")
 
-                Log.d("sendButton02클릭","절대경로 존재")
+                Log.d("sendButton02클릭","경로 존재")
 
                 // todo 원본이미지,Paint이미지 서버에 전송
                 sendImageRetrofit02(image_absolutely_path!!,canvas_cach_path!!)
@@ -177,6 +177,9 @@ class ObjectEraserActivity : AppCompatActivity() {
 
 
 
+
+
+
         // 요청코드= OPEN_GALLERY 이고, 응답코드 =Activity.RESULT_OK 이고, 반환 데이터가 존재할때
         if(requestCode == OPEN_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
             //데이터 URI selectedPhotoUri변수에 저장후 textView에 출력
@@ -184,6 +187,9 @@ class ObjectEraserActivity : AppCompatActivity() {
 
             //media content URI
             image_content_uri = selectedPhotoUri.toString()
+
+            //Uri-> 절대 경로 저장
+            getabsolutelyPath(selectedPhotoUri!!)
 
 
             // uri경로를 가지고  Bitmap불러오기
@@ -272,6 +278,26 @@ class ObjectEraserActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    // todo  Uri -> 절대경로 변환
+    private fun getabsolutelyPath(uri : Uri): String {
+
+        var result = ""
+        var cursor : Cursor = contentResolver?.query(uri, null, null, null, null)!!
+
+
+        if(cursor == null) {
+            result = uri?.path.toString()//   나중에 고쳐야됨
+        }else {
+            cursor.moveToFirst()
+            var idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            image_absolutely_path = cursor.getString(idx).toString()
+            cursor.close()
+            return image_absolutely_path as String
+        }
+        Log.e("tag", "절대경로 "+ result)
+        return result
     }
 
 

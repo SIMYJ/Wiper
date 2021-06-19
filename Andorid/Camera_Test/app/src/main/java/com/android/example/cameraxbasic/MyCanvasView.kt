@@ -86,10 +86,10 @@ class MyCanvasView @JvmOverloads constructor(
     //페인트를 설정
     // Set up the paint with which to draw.
 
-    lateinit var paint :Paint
+
 
     //색칠 설정
-    private val drawpPaint = Paint().apply {
+    private val paint = Paint().apply {
 
         color = drawColor
         //모양에 영향을 미치지 않고 그려진 가장자리를 다듬습니다.
