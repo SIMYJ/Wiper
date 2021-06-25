@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RetrofitActivity">
+
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="700dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgView_canvasDraw"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/ic_edit_white_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/drawText"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginStart="50dp"
+        android:gravity="center"
+        android:text="색칠"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_canvasDraw" />
+
+    <ImageView
+        android:id="@+id/imgView_objectEraser"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_eraser_white_24dp"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/drawEraser"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginStart="140dp"
+        android:gravity="center"
+        android:text="지우기"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_objectEraser" />
+
+    <ImageView
+        android:id="@+id/imgView_openGallery"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="140dp"
+        android:background="@drawable/ic_image_white_24dp"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/drawGallery"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginEnd="140dp"
+        android:gravity="center"
+        android:text="앨범"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_openGallery" />
+
+    <ImageView
+        android:id="@+id/imgView_save"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/ic_save_white_24dp"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/drawSave"
+        android:layout_width="@dimen/margin_small"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginEnd="50dp"
+        android:gravity="center"
+        android:text="저장"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_save" />
+
+
+    <!-- 줌인 줌아웃 라이브러리-->
+
+
+    <Button
+        android:id="@+id/completeBtn"
+        android:layout_width="@dimen/margin_large"
+        android:layout_height="@dimen/margin_small"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/round_button"
+        android:text="완료"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/customView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/canvasText"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:text="지우고 싶은 부분을 색칠해 주세요."
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/penWidthSetting"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="350dp"
+        android:max="100"
+        android:rotation="90"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="@+id/customView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
